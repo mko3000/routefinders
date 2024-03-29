@@ -1,11 +1,7 @@
 {
     "maps": [
         {
-            "name": "test_map1",
-            "layout": ""
-        },
-        {
-            "name": "testi_jee",
+            "name": "test_map",
             "layout": [
                 [
                     {
@@ -14,516 +10,412 @@
                         "blocked": false
                     },
                     {
-                        "x": 0,
-                        "y": 1,
-                        "blocked": false
-                    },
-                    {
-                        "x": 0,
-                        "y": 2,
-                        "blocked": false
-                    },
-                    {
-                        "x": 0,
-                        "y": 3,
-                        "blocked": false
-                    },
-                    {
-                        "x": 0,
-                        "y": 4,
-                        "blocked": false
-                    },
-                    {
-                        "x": 0,
-                        "y": 5,
-                        "blocked": false
-                    },
-                    {
-                        "x": 0,
-                        "y": 6,
-                        "blocked": false
-                    },
-                    {
-                        "x": 0,
-                        "y": 7,
-                        "blocked": true
-                    },
-                    {
-                        "x": 0,
-                        "y": 8,
-                        "blocked": false
-                    },
-                    {
-                        "x": 0,
-                        "y": 9,
-                        "blocked": false
-                    }
-                ],
-                [
-                    {
                         "x": 1,
                         "y": 0,
                         "blocked": false
                     },
-                    {
-                        "x": 1,
-                        "y": 1,
-                        "blocked": false
-                    },
-                    {
-                        "x": 1,
-                        "y": 2,
-                        "blocked": false
-                    },
-                    {
-                        "x": 1,
-                        "y": 3,
-                        "blocked": false
-                    },
-                    {
-                        "x": 1,
-                        "y": 4,
-                        "blocked": false
-                    },
-                    {
-                        "x": 1,
-                        "y": 5,
-                        "blocked": false
-                    },
-                    {
-                        "x": 1,
-                        "y": 6,
-                        "blocked": false
-                    },
-                    {
-                        "x": 1,
-                        "y": 7,
-                        "blocked": true
-                    },
-                    {
-                        "x": 1,
-                        "y": 8,
-                        "blocked": false
-                    },
-                    {
-                        "x": 1,
-                        "y": 9,
-                        "blocked": false
-                    }
-                ],
-                [
                     {
                         "x": 2,
                         "y": 0,
                         "blocked": false
                     },
                     {
-                        "x": 2,
-                        "y": 1,
-                        "blocked": false
-                    },
-                    {
-                        "x": 2,
-                        "y": 2,
-                        "blocked": true
-                    },
-                    {
-                        "x": 2,
-                        "y": 3,
-                        "blocked": true
-                    },
-                    {
-                        "x": 2,
-                        "y": 4,
-                        "blocked": false
-                    },
-                    {
-                        "x": 2,
-                        "y": 5,
-                        "blocked": false
-                    },
-                    {
-                        "x": 2,
-                        "y": 6,
-                        "blocked": false
-                    },
-                    {
-                        "x": 2,
-                        "y": 7,
-                        "blocked": true
-                    },
-                    {
-                        "x": 2,
-                        "y": 8,
-                        "blocked": false
-                    },
-                    {
-                        "x": 2,
-                        "y": 9,
-                        "blocked": false
-                    }
-                ],
-                [
-                    {
                         "x": 3,
                         "y": 0,
                         "blocked": false
                     },
-                    {
-                        "x": 3,
-                        "y": 1,
-                        "blocked": false
-                    },
-                    {
-                        "x": 3,
-                        "y": 2,
-                        "blocked": false
-                    },
-                    {
-                        "x": 3,
-                        "y": 3,
-                        "blocked": false
-                    },
-                    {
-                        "x": 3,
-                        "y": 4,
-                        "blocked": false
-                    },
-                    {
-                        "x": 3,
-                        "y": 5,
-                        "blocked": false
-                    },
-                    {
-                        "x": 3,
-                        "y": 6,
-                        "blocked": false
-                    },
-                    {
-                        "x": 3,
-                        "y": 7,
-                        "blocked": true
-                    },
-                    {
-                        "x": 3,
-                        "y": 8,
-                        "blocked": false
-                    },
-                    {
-                        "x": 3,
-                        "y": 9,
-                        "blocked": false
-                    }
-                ],
-                [
                     {
                         "x": 4,
                         "y": 0,
                         "blocked": false
                     },
                     {
-                        "x": 4,
-                        "y": 1,
-                        "blocked": false
-                    },
-                    {
-                        "x": 4,
-                        "y": 2,
-                        "blocked": false
-                    },
-                    {
-                        "x": 4,
-                        "y": 3,
-                        "blocked": false
-                    },
-                    {
-                        "x": 4,
-                        "y": 4,
-                        "blocked": false
-                    },
-                    {
-                        "x": 4,
-                        "y": 5,
-                        "blocked": false
-                    },
-                    {
-                        "x": 4,
-                        "y": 6,
-                        "blocked": false
-                    },
-                    {
-                        "x": 4,
-                        "y": 7,
-                        "blocked": true
-                    },
-                    {
-                        "x": 4,
-                        "y": 8,
-                        "blocked": false
-                    },
-                    {
-                        "x": 4,
-                        "y": 9,
-                        "blocked": false
-                    }
-                ],
-                [
-                    {
                         "x": 5,
                         "y": 0,
                         "blocked": false
                     },
-                    {
-                        "x": 5,
-                        "y": 1,
-                        "blocked": false
-                    },
-                    {
-                        "x": 5,
-                        "y": 2,
-                        "blocked": false
-                    },
-                    {
-                        "x": 5,
-                        "y": 3,
-                        "blocked": false
-                    },
-                    {
-                        "x": 5,
-                        "y": 4,
-                        "blocked": false
-                    },
-                    {
-                        "x": 5,
-                        "y": 5,
-                        "blocked": false
-                    },
-                    {
-                        "x": 5,
-                        "y": 6,
-                        "blocked": false
-                    },
-                    {
-                        "x": 5,
-                        "y": 7,
-                        "blocked": false
-                    },
-                    {
-                        "x": 5,
-                        "y": 8,
-                        "blocked": false
-                    },
-                    {
-                        "x": 5,
-                        "y": 9,
-                        "blocked": false
-                    }
-                ],
-                [
                     {
                         "x": 6,
                         "y": 0,
                         "blocked": true
                     },
                     {
-                        "x": 6,
-                        "y": 1,
-                        "blocked": true
-                    },
-                    {
-                        "x": 6,
-                        "y": 2,
-                        "blocked": true
-                    },
-                    {
-                        "x": 6,
-                        "y": 3,
-                        "blocked": true
-                    },
-                    {
-                        "x": 6,
-                        "y": 4,
-                        "blocked": true
-                    },
-                    {
-                        "x": 6,
-                        "y": 5,
-                        "blocked": true
-                    },
-                    {
-                        "x": 6,
-                        "y": 6,
-                        "blocked": true
-                    },
-                    {
-                        "x": 6,
-                        "y": 7,
-                        "blocked": true
-                    },
-                    {
-                        "x": 6,
-                        "y": 8,
-                        "blocked": false
-                    },
-                    {
-                        "x": 6,
-                        "y": 9,
-                        "blocked": false
-                    }
-                ],
-                [
-                    {
                         "x": 7,
                         "y": 0,
                         "blocked": false
                     },
-                    {
-                        "x": 7,
-                        "y": 1,
-                        "blocked": false
-                    },
-                    {
-                        "x": 7,
-                        "y": 2,
-                        "blocked": false
-                    },
-                    {
-                        "x": 7,
-                        "y": 3,
-                        "blocked": false
-                    },
-                    {
-                        "x": 7,
-                        "y": 4,
-                        "blocked": false
-                    },
-                    {
-                        "x": 7,
-                        "y": 5,
-                        "blocked": false
-                    },
-                    {
-                        "x": 7,
-                        "y": 6,
-                        "blocked": false
-                    },
-                    {
-                        "x": 7,
-                        "y": 7,
-                        "blocked": false
-                    },
-                    {
-                        "x": 7,
-                        "y": 8,
-                        "blocked": false
-                    },
-                    {
-                        "x": 7,
-                        "y": 9,
-                        "blocked": false
-                    }
-                ],
-                [
                     {
                         "x": 8,
                         "y": 0,
                         "blocked": false
                     },
                     {
-                        "x": 8,
-                        "y": 1,
-                        "blocked": false
-                    },
-                    {
-                        "x": 8,
-                        "y": 2,
-                        "blocked": false
-                    },
-                    {
-                        "x": 8,
-                        "y": 3,
-                        "blocked": false
-                    },
-                    {
-                        "x": 8,
-                        "y": 4,
-                        "blocked": false
-                    },
-                    {
-                        "x": 8,
-                        "y": 5,
-                        "blocked": false
-                    },
-                    {
-                        "x": 8,
-                        "y": 6,
-                        "blocked": false
-                    },
-                    {
-                        "x": 8,
-                        "y": 7,
-                        "blocked": false
-                    },
-                    {
-                        "x": 8,
-                        "y": 8,
-                        "blocked": false
-                    },
-                    {
-                        "x": 8,
-                        "y": 9,
+                        "x": 9,
+                        "y": 0,
                         "blocked": false
                     }
                 ],
                 [
                     {
-                        "x": 9,
-                        "y": 0,
+                        "x": 0,
+                        "y": 1,
+                        "blocked": false
+                    },
+                    {
+                        "x": 1,
+                        "y": 1,
+                        "blocked": false
+                    },
+                    {
+                        "x": 2,
+                        "y": 1,
+                        "blocked": false
+                    },
+                    {
+                        "x": 3,
+                        "y": 1,
+                        "blocked": false
+                    },
+                    {
+                        "x": 4,
+                        "y": 1,
+                        "blocked": false
+                    },
+                    {
+                        "x": 5,
+                        "y": 1,
+                        "blocked": false
+                    },
+                    {
+                        "x": 6,
+                        "y": 1,
+                        "blocked": true
+                    },
+                    {
+                        "x": 7,
+                        "y": 1,
+                        "blocked": false
+                    },
+                    {
+                        "x": 8,
+                        "y": 1,
                         "blocked": false
                     },
                     {
                         "x": 9,
                         "y": 1,
                         "blocked": false
+                    }
+                ],
+                [
+                    {
+                        "x": 0,
+                        "y": 2,
+                        "blocked": false
+                    },
+                    {
+                        "x": 1,
+                        "y": 2,
+                        "blocked": false
+                    },
+                    {
+                        "x": 2,
+                        "y": 2,
+                        "blocked": true
+                    },
+                    {
+                        "x": 3,
+                        "y": 2,
+                        "blocked": false
+                    },
+                    {
+                        "x": 4,
+                        "y": 2,
+                        "blocked": false
+                    },
+                    {
+                        "x": 5,
+                        "y": 2,
+                        "blocked": false
+                    },
+                    {
+                        "x": 6,
+                        "y": 2,
+                        "blocked": true
+                    },
+                    {
+                        "x": 7,
+                        "y": 2,
+                        "blocked": false
+                    },
+                    {
+                        "x": 8,
+                        "y": 2,
+                        "blocked": false
                     },
                     {
                         "x": 9,
                         "y": 2,
+                        "blocked": false
+                    }
+                ],
+                [
+                    {
+                        "x": 0,
+                        "y": 3,
+                        "blocked": false
+                    },
+                    {
+                        "x": 1,
+                        "y": 3,
+                        "blocked": false
+                    },
+                    {
+                        "x": 2,
+                        "y": 3,
+                        "blocked": true
+                    },
+                    {
+                        "x": 3,
+                        "y": 3,
+                        "blocked": false
+                    },
+                    {
+                        "x": 4,
+                        "y": 3,
+                        "blocked": false
+                    },
+                    {
+                        "x": 5,
+                        "y": 3,
+                        "blocked": false
+                    },
+                    {
+                        "x": 6,
+                        "y": 3,
+                        "blocked": true
+                    },
+                    {
+                        "x": 7,
+                        "y": 3,
+                        "blocked": false
+                    },
+                    {
+                        "x": 8,
+                        "y": 3,
                         "blocked": false
                     },
                     {
                         "x": 9,
                         "y": 3,
                         "blocked": false
+                    }
+                ],
+                [
+                    {
+                        "x": 0,
+                        "y": 4,
+                        "blocked": false
+                    },
+                    {
+                        "x": 1,
+                        "y": 4,
+                        "blocked": false
+                    },
+                    {
+                        "x": 2,
+                        "y": 4,
+                        "blocked": false
+                    },
+                    {
+                        "x": 3,
+                        "y": 4,
+                        "blocked": false
+                    },
+                    {
+                        "x": 4,
+                        "y": 4,
+                        "blocked": false
+                    },
+                    {
+                        "x": 5,
+                        "y": 4,
+                        "blocked": false
+                    },
+                    {
+                        "x": 6,
+                        "y": 4,
+                        "blocked": false
+                    },
+                    {
+                        "x": 7,
+                        "y": 4,
+                        "blocked": false
+                    },
+                    {
+                        "x": 8,
+                        "y": 4,
+                        "blocked": false
                     },
                     {
                         "x": 9,
                         "y": 4,
+                        "blocked": false
+                    }
+                ],
+                [
+                    {
+                        "x": 0,
+                        "y": 5,
+                        "blocked": false
+                    },
+                    {
+                        "x": 1,
+                        "y": 5,
+                        "blocked": false
+                    },
+                    {
+                        "x": 2,
+                        "y": 5,
+                        "blocked": false
+                    },
+                    {
+                        "x": 3,
+                        "y": 5,
+                        "blocked": false
+                    },
+                    {
+                        "x": 4,
+                        "y": 5,
+                        "blocked": false
+                    },
+                    {
+                        "x": 5,
+                        "y": 5,
+                        "blocked": false
+                    },
+                    {
+                        "x": 6,
+                        "y": 5,
+                        "blocked": true
+                    },
+                    {
+                        "x": 7,
+                        "y": 5,
+                        "blocked": false
+                    },
+                    {
+                        "x": 8,
+                        "y": 5,
                         "blocked": false
                     },
                     {
                         "x": 9,
                         "y": 5,
                         "blocked": false
+                    }
+                ],
+                [
+                    {
+                        "x": 0,
+                        "y": 6,
+                        "blocked": false
                     },
                     {
-                        "x": 9,
+                        "x": 1,
+                        "y": 6,
+                        "blocked": false
+                    },
+                    {
+                        "x": 2,
+                        "y": 6,
+                        "blocked": false
+                    },
+                    {
+                        "x": 3,
+                        "y": 6,
+                        "blocked": false
+                    },
+                    {
+                        "x": 4,
+                        "y": 6,
+                        "blocked": false
+                    },
+                    {
+                        "x": 5,
+                        "y": 6,
+                        "blocked": false
+                    },
+                    {
+                        "x": 6,
+                        "y": 6,
+                        "blocked": true
+                    },
+                    {
+                        "x": 7,
+                        "y": 6,
+                        "blocked": false
+                    },
+                    {
+                        "x": 8,
                         "y": 6,
                         "blocked": false
                     },
                     {
                         "x": 9,
+                        "y": 6,
+                        "blocked": false
+                    }
+                ],
+                [
+                    {
+                        "x": 0,
+                        "y": 7,
+                        "blocked": true
+                    },
+                    {
+                        "x": 1,
+                        "y": 7,
+                        "blocked": true
+                    },
+                    {
+                        "x": 2,
+                        "y": 7,
+                        "blocked": true
+                    },
+                    {
+                        "x": 3,
+                        "y": 7,
+                        "blocked": true
+                    },
+                    {
+                        "x": 4,
+                        "y": 7,
+                        "blocked": true
+                    },
+                    {
+                        "x": 5,
+                        "y": 7,
+                        "blocked": false
+                    },
+                    {
+                        "x": 6,
+                        "y": 7,
+                        "blocked": true
+                    },
+                    {
+                        "x": 7,
+                        "y": 7,
+                        "blocked": false
+                    },
+                    {
+                        "x": 8,
                         "y": 7,
                         "blocked": false
                     },
                     {
                         "x": 9,
-                        "y": 8,
-                        "blocked": false
-                    },
-                    {
-                        "x": 9,
-                        "y": 9,
+                        "y": 7,
                         "blocked": false
                     }
                 ]

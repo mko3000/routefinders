@@ -9,6 +9,9 @@ class Tile:
         self.x = x
         self.y = y
         self.blocked = blocked
+        self.neighbors = []
+        self.dist = float("Inf")
+        self.visited = False
         
     def draw_tile(self,screen,c):
         if type(c) == int and c<=225 and c>=0:
@@ -18,9 +21,28 @@ class Tile:
         else:
             color = (0,0,0)
         draw.rect(screen,color,(self.x*self.size, self.y*self.size, self.size, self.size))
+
+
+    def update_neighbors(self, grid):
+        if self.blocked:
+            return
+        self.neighbors = []
+        n_coords = [(self.x,self.y-1),(self.x-1,self.y),(self.x, self.y+1),(self.x+1, self.y)]
+        for n in n_coords:
+            free_neighbor = grid.get_free_tile(n[0],n[1])
+            if free_neighbor:
+                self.neighbors.append(free_neighbor)  
         
+    def reset_tile(self):
+        self.dist = float("Inf")
+        self.visited = False
+        self.neighbors = []
+    
     def __str__(self) -> str:
-        return f'({self.x},{self.y},{self.blocked})'
+        return f'[({self.x},{self.y}), b:{self.blocked}, n:{len(self.neighbors)}, d:{self.dist}]'
+    
+    def __gt__(self,other):
+        return self.dist > other.dist
 
 class Grid:
     def __init__(self,width,height):
@@ -32,27 +54,67 @@ class Grid:
         """
         self.w = width
         self.h = height        
-        self.grid = [[Tile(i,j) for j in range(height)] for i in range(width)]
-
-
+        self.grid = [[Tile(x,y) for x in range(width)] for y in range(height)]
+        self.start = self.get_tile(0,0)
+        self.end = self.get_tile(width-1,height-1)
+    
+    def valid_coordinates(self,x,y):
+        if x >= 0 and x < self.w and y >= 0 and y < self.h:
+            return True
+        return False
+    
+    def get_tile(self,x,y):
+        if self.valid_coordinates(x,y): 
+            return self.grid[y][x]
+        return None
+    
+    def get_free_tile(self,x,y):
+        if self.valid_coordinates(x,y) and not self.grid[y][x].blocked: 
+            return self.grid[y][x]
+        return None
+    
+    def set_tile(self,x,y,blocked = False):
+        if self.valid_coordinates(x,y): 
+            tile = Tile(x,y,blocked)
+            self.grid[y][x] = tile
+            return tile
+        return None
     
     def change_tile_state(self,x,y):
-        self.grid[x][y].blocked = not self.grid[x][y].blocked
+        if self.valid_coordinates(x,y):
+            self.grid[y][x].blocked = not self.grid[y][x].blocked
 
     def block_tile(self,x,y):
-        self.grid[x][y].blocked = True
+        if self.valid_coordinates(x,y):
+            self.grid[y][x].blocked = True
 
     def unblock_tile(self,x,y):
-        self.grid[x][y].blocked = False
+        if self.valid_coordinates(x,y):
+            self.grid[y][x].blocked = False
 
+    def set_start(self,x,y):
+        if self.valid_coordinates(x,y):
+            self.start = self.get_tile(x,y)
+    
+    def set_end(self,x,y):
+        if self.valid_coordinates(x,y):
+            self.end = self.get_tile(x,y)
+
+    def reset_tiles(self):
+        [[tile.reset_tile() for tile in row] for row in self.grid]
+    
     def draw_grid(self,screen):
-        for i in range(self.w):
-            for j in range(self.h):
-                if self.grid[i][j].blocked:
-                    self.grid[i][j].draw_tile(screen,0)
+        for y in range(self.h):
+            for x in range(self.w):
+                if self.grid[y][x].blocked:
+                    self.grid[y][x].draw_tile(screen,0)
                 else:
-                    self.grid[i][j].draw_tile(screen,225)
-        display.update()
+                    self.grid[y][x].draw_tile(screen,225)
+        self.draw_end_and_start(screen)
+
+    def draw_end_and_start(self,screen):
+        self.start.draw_tile(screen,(0,225,0))
+        self.end.draw_tile(screen,(225,0,0))
     
     def draw_test_gradient_grid(self,screen):
         shade = 0
@@ -63,7 +125,7 @@ class Grid:
                 shade += 1
                 if shade >= 225:
                     shade = 0
-        display.update()
+
 
     def __str__(self) -> str:
         output = ""
