@@ -1,6 +1,7 @@
 import pygame
 from grid import Tile,Grid
 import algorithms
+import sys
 
 class Ui:
     def __init__(self, init_screen_width = 800, grid_width = 30, grid_height = 30):
@@ -15,9 +16,6 @@ class Ui:
 
     def start(self):
         print("start")
-        testile = Tile(4,5)
-        print(testile.x, testile.y, testile.size)
-        print(self.screen_width,"x",self.screen_height)
         self.main()
 
     def get_grid_tile_from_screen_pos(self,pos):
@@ -30,7 +28,9 @@ class Ui:
     def quit_condition(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
+                print("\nquitting\n")
                 pygame.quit()
+                sys.exit()
 
     
     def main(self):
@@ -38,12 +38,12 @@ class Ui:
         running = True
         started = False
         pygame.time.Clock().tick(self.framerate)
-        Font=pygame.font.SysFont('timesnewroman',  20)
+        Font=pygame.font.SysFont('timesnewroman',  int(Tile.size/2))
         
         start_press_delay = self.framerate
         d=[[],[],0]
         route = []
-        self.grid.set_end(5,7)
+        #self.grid.set_end(15,15)
 
         count = 0
         
@@ -78,7 +78,8 @@ class Ui:
             if start_key_pressed and start_press_delay > self.framerate:
                 started = True
                 start_press_delay = 0
-                [[tile.update_neighbors(self.grid)for tile in row] for row in self.grid.grid]
+                self.grid.update_all_neighbors()
+                #[[tile.update_neighbors(self.grid)for tile in row] for row in self.grid.grid]
                 dijk = algorithms.Dijkstra(self.grid,self.screen,(225,0,225))
                 d = dijk.run_dijkstra()
                 if d:
@@ -94,6 +95,7 @@ class Ui:
                     for tile in route:
                         tile.draw_tile(self.screen,(225,225,0))
                     for tile in d[0]:
+                        
                         no = Font.render((f'{d[0].index(tile)}'),False,(225,225,225),(0,0,0))
                         self.screen.blit(no,(tile.x*Tile.size,tile.y*Tile.size))
                     self.grid.draw_end_and_start(self.screen)
@@ -106,5 +108,5 @@ class Ui:
 
 
 if __name__ == "__main__":
-    ui = Ui(400, 10, 15)
+    ui = Ui(800, 30, 30)
     ui.start()

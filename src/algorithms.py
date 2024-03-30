@@ -82,7 +82,8 @@ if __name__ == "__main__":
     print(small_grid)
     #screen = pygame.display.set_mode((small_grid.w*30, small_grid.h*30))
     screen = None
-    [[tile.update_neighbors(small_grid)for tile in row] for row in small_grid.grid]
+    small_grid.update_all_neighbors()
+    #[[tile.update_neighbors(small_grid)for tile in row] for row in small_grid.grid]
     # small_grid.start.update_neighbors(small_grid)
     # small_grid.end.update_neighbors(small_grid)
 

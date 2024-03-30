@@ -22,16 +22,22 @@ class Tile:
             color = (0,0,0)
         draw.rect(screen,color,(self.x*self.size, self.y*self.size, self.size, self.size))
 
+    # def update_neighbors(self, grid):
+    #     if self.blocked:
+    #         return
+    #     self.neighbors = []
+    #     #n_coords = [(self.x,self.y-1),(self.x-1,self.y),(self.x, self.y+1),(self.x+1, self.y)] # up, left, down, right
+    #     n_coords = [(self.x, self.y+1),(self.x,self.y-1),(self.x+1, self.y),(self.x-1,self.y)] # down, right, up, left
+    #     for n in n_coords:
+    #         free_neighbor = grid.get_free_tile(n[0],n[1])
+    #         if free_neighbor:
+    #             self.neighbors.append(free_neighbor)  
 
-    def update_neighbors(self, grid):
+    def update_neighbors(self, neighbors):
         if self.blocked:
-            return
-        self.neighbors = []
-        n_coords = [(self.x,self.y-1),(self.x-1,self.y),(self.x, self.y+1),(self.x+1, self.y)]
-        for n in n_coords:
-            free_neighbor = grid.get_free_tile(n[0],n[1])
-            if free_neighbor:
-                self.neighbors.append(free_neighbor)  
+            self.neighbors = []
+        else:
+            self.neighbors = neighbors
         
     def reset_tile(self):
         self.dist = float("Inf")
@@ -102,6 +108,23 @@ class Grid:
 
     def reset_tiles(self):
         [[tile.reset_tile() for tile in row] for row in self.grid]
+
+    def update_all_neighbors(self):
+        for y in range(self.h):
+            for x in range(self.w):
+                tile = self.grid[y][x]
+                if not tile.blocked:
+                    neighbors = self.calculate_neighbors(x, y)
+                    tile.update_neighbors(neighbors)
+
+    def calculate_neighbors(self, x, y):
+        neighbors = []
+        directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]  # down, up, right, left
+        for dx, dy in directions:
+            nx, ny = x + dx, y + dy
+            if self.valid_coordinates(nx, ny) and not self.grid[ny][nx].blocked:
+                neighbors.append(self.grid[ny][nx])
+        return neighbors
     
     def draw_grid(self,screen):
         for y in range(self.h):
