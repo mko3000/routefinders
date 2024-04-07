@@ -1,112 +1,90 @@
-import pygame
-from grid import Tile,Grid
-import algorithms
+from gui import Gui
+from grid import Grid
+from map_handler import MapHandler
 import sys
 
+
 class Ui:
-    def __init__(self, init_screen_width = 800, grid_width = 30, grid_height = 30):
-        self.framerate = 20
-        self.grid_widht = grid_width       
-        self.grid_height = grid_height
-        Tile.size = init_screen_width//grid_width
-        self.screen_width = grid_width*Tile.size
-        self.screen_height = grid_height*Tile.size
-        self.screen = pygame.display.set_mode((self.screen_width, self.screen_height))
-        self.grid = Grid(grid_width, grid_height)
+    def __init__(self) -> None:
+        pass
 
     def start(self):
-        print("start")
-        self.main()
+        self.menu()
 
-    def get_grid_tile_from_screen_pos(self,pos):
-        return pos[0]//Tile.size, pos[1]//Tile.size
-    
-    def draw_obstacle(self, tile:Tile):
-        tile.blocked = True
-        tile.draw_tile(self.screen,225)
+    def menu(self):
+        while True:
+            print("""
+Select how you want to run your search algorithms:
+1 draw custom map
+2 load saved map
+q quit
+                  """)
+            user_input = input(">> ")
+            match user_input:
+                case "1":
+                    self.start_gui()
+                case "2":
+                    self.load_map()
+                case "q":
+                    self.quit_program()
+                case _:
+                    print("Unrecognized input - please try again.")
+            
 
-    def quit_condition(self):
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                print("\nquitting\n")
-                pygame.quit()
-                sys.exit()
+    def quit_program(self):
+        print("quitting")
+        sys.exit()
 
-    
-    def main(self):
-        pygame.init()
-        running = True
-        started = False
-        pygame.time.Clock().tick(self.framerate)
-        Font=pygame.font.SysFont('timesnewroman',  int(Tile.size/2))
+    def start_gui(self,m = None):
+        if m == None:
+            gui = Gui()
+            grid = gui.start()
+        else:
+            gui = Gui(grid=m)
+            grid = gui.start()
+        self.run_ended(grid)
+
+    def run_ended(self,grid):
+        print("Run ended.")
+        print("Map:")
+        print(grid)
+        print("do you want to save the map? (y/n)")
+        user_input = input(">> ")
+        match user_input:
+            case "y":
+                self.save_map(grid)
+            case "n":
+                return
+            case _:
+                print("Unrecognized input - please try again.")
+
+    def save_map(self,grid):
+        map_handler = MapHandler()
+        saved = False
+        while not saved:
+            print("name your map. (cancel saving by pressing 'c')")
+            map_name = input(">> ")
+            if map_name == "c":
+                break
+            saved = map_handler.save_map(grid, map_name)
+
+    def load_map(self):
+        map_handler = MapHandler()
+        loaded = False
+        while not loaded:
+            print("Available maps:")
+            map_list = map_handler.list_maps()
+            for m in map_list:
+                print(m)
+            print("Which map do you want to load? (cancel loading by pressing 'c')")
+            map_name = input(">> ")
+            if map_name == "c":
+                break
+            loaded = map_handler.load_map(map_name)
+        if loaded:
+            self.start_gui(loaded)
         
-        start_press_delay = self.framerate
-        d=[[],[],0]
-        route = []
-        #self.grid.set_end(15,15)
-
-        count = 0
-        
-        while running:
-            # count += 1
-            # if count >= 100:
-            #     print(".")
-            #     count = 0
-            
-            keys = pygame.key.get_pressed()
-            self.screen.fill((255, 255, 255))
-            
-
-            self.quit_condition()            
-
-            self.grid.draw_grid(self.screen)
-
-            # test_text = Font.render((f'{count}'),False,(225,225,225),(0,0,0))
-            # self.screen.blit(test_text,(self.screen_width/2,self.screen_height/2))
-            
-            if pygame.mouse.get_pressed()[0]:
-                pos = pygame.mouse.get_pos()
-                x, y = self.get_grid_tile_from_screen_pos(pos)
-                self.grid.block_tile(x, y)
-            
-            if pygame.mouse.get_pressed()[2]:
-                pos = pygame.mouse.get_pos()
-                x, y = self.get_grid_tile_from_screen_pos(pos)
-                self.grid.unblock_tile(x, y)
-            
-            start_key_pressed = keys[pygame.K_SPACE]
-            if start_key_pressed and start_press_delay > self.framerate:
-                started = True
-                start_press_delay = 0
-                self.grid.update_all_neighbors()
-                #[[tile.update_neighbors(self.grid)for tile in row] for row in self.grid.grid]
-                dijk = algorithms.Dijkstra(self.grid,self.screen,(225,0,225))
-                d = dijk.run_dijkstra()
-                if d:
-                    route = dijk.get_route()
-                #d = algorithms.dijkstra(self.grid,self.screen,(225,0,225))
-            if start_press_delay <= self.framerate + 1:
-                start_press_delay += 1
-            if started:
-                if d:
-                    for tile in d[1]:
-                        if d[1][tile]:
-                            tile.draw_tile(self.screen,(225,0,225))
-                    for tile in route:
-                        tile.draw_tile(self.screen,(225,225,0))
-                    for tile in d[0]:
-                        
-                        no = Font.render((f'{d[0].index(tile)}'),False,(225,225,225),(0,0,0))
-                        self.screen.blit(no,(tile.x*Tile.size,tile.y*Tile.size))
-                    self.grid.draw_end_and_start(self.screen)
-
-            pygame.display.update()
-            pygame.time.Clock().tick(self.framerate)
-
-        pygame.quit()
-        print(self.grid)
-
 
 if __name__ == "__main__":
-    ui = Ui(800, 30, 30)
+    ui = Ui()
     ui.start()

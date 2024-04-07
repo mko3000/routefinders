@@ -10,7 +10,6 @@ class Tile:
         self.y = y
         self.blocked = blocked
         self.neighbors = []
-        self.dist = float("Inf")
         self.visited = False
         
     def draw_tile(self,screen,c):
@@ -22,17 +21,6 @@ class Tile:
             color = (0,0,0)
         draw.rect(screen,color,(self.x*self.size, self.y*self.size, self.size, self.size))
 
-    # def update_neighbors(self, grid):
-    #     if self.blocked:
-    #         return
-    #     self.neighbors = []
-    #     #n_coords = [(self.x,self.y-1),(self.x-1,self.y),(self.x, self.y+1),(self.x+1, self.y)] # up, left, down, right
-    #     n_coords = [(self.x, self.y+1),(self.x,self.y-1),(self.x+1, self.y),(self.x-1,self.y)] # down, right, up, left
-    #     for n in n_coords:
-    #         free_neighbor = grid.get_free_tile(n[0],n[1])
-    #         if free_neighbor:
-    #             self.neighbors.append(free_neighbor)  
-
     def update_neighbors(self, neighbors):
         if self.blocked:
             self.neighbors = []
@@ -40,15 +28,59 @@ class Tile:
             self.neighbors = neighbors
         
     def reset_tile(self):
-        self.dist = float("Inf")
-        self.visited = False
-        self.neighbors = []
+        return Tile(self.x, self.y, self.blocked)
     
     def __str__(self) -> str:
-        return f'[({self.x},{self.y}), b:{self.blocked}, n:{len(self.neighbors)}, d:{self.dist}]'
+        return f'[({self.x},{self.y}), b:{self.blocked}, n:{len(self.neighbors)}]'
+    
+    
+class Dijkstra_tile(Tile):
+    def __init__(self, x=None, y=None, blocked=None):
+        super().__init__(x, y, blocked)
+        self.dist = float("Inf")
+
+    @classmethod
+    def from_Tile(cls, tile: Tile):
+        d_tile_obj = cls()
+        for key, value in tile.__dict__.items():
+            d_tile_obj.__dict__[key] = value
+        return d_tile_obj    
     
     def __gt__(self,other):
         return self.dist > other.dist
+    
+    def __str__(self) -> str:
+        return f'[({self.x},{self.y}), b:{self.blocked}, n:{len(self.neighbors)}, d:{self.dist}]'
+
+class Astar_tile(Tile):
+    def __init__(self, x=None, y=None, blocked=False):
+        super().__init__(x, y, blocked)
+        self.g_score = float("Inf")
+        self.f_score = float("Inf")
+    
+    @classmethod
+    def from_Tile(cls, tile: Tile):
+        a_tile_obj = cls()
+        for key, value in tile.__dict__.items():
+            a_tile_obj.__dict__[key] = value
+        return a_tile_obj  
+
+    def __gt__(self,other):
+        return self.f_score > other.f_score 
+
+
+class JPS_tile(Tile):
+    def __init__(self, x, y, blocked=False):
+        super().__init__(x, y, blocked)
+        self.natural_neighbors = []
+    
+    @classmethod
+    def from_Tile(cls, tile: Tile):
+        d_tile_obj = cls()
+        for key, value in tile.__dict__.items():
+            d_tile_obj.__dict__[key] = value
+        return d_tile_obj   
+
 
 class Grid:
     def __init__(self,width,height):
@@ -161,3 +193,6 @@ class Grid:
                     row += "."
             output += f'{row}\n'
         return output
+    
+if __name__ == "__main__":
+    pass

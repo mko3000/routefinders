@@ -79,7 +79,6 @@ class Gui:
                 routefinding_started = True
                 start_press_delay = 0
                 self.grid.reset_tiles()
-                self.grid.update_all_neighbors()
                 if d_start_key_pressed:
                     routefinder = algorithms.Dijkstra(self.grid)
                     routefinder.run_dijkstra()
@@ -112,8 +111,8 @@ if __name__ == "__main__":
     # print(grid)
 
     mh = MapHandler()
-    dog_map = mh.load_map("dog")
-    ui = Gui(grid=dog_map)
+    l_map = mh.load_map("s3")
+    ui = Gui(grid=l_map)
     grid = ui.start()
     print(grid)
 

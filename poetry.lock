@@ -37,6 +37,17 @@ files = [
 ]
 
 [[package]]
+name = "invoke"
+version = "2.2.0"
+description = "Pythonic task execution"
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "invoke-2.2.0-py3-none-any.whl", hash = "sha256:6ea924cc53d4f78e3d98bc436b08069a03077e6f85ad1ddaa8a116d7dad15820"},
+    {file = "invoke-2.2.0.tar.gz", hash = "sha256:ee6cbb101af1a859c7fe84f2a264c059020b0cb7fe3535f9424300ab568f6bd5"},
+]
+
+[[package]]
 name = "packaging"
 version = "24.0"
 description = "Core utilities for Python packages"
@@ -164,4 +175,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "2690d4f4d645c94768b795999009d3e8e9442769b1c870b0f91da1dcdb24202b"
+content-hash = "6b02e4d23b61e992dc47ce59c7d5b698d33d7b340c9f71a5ac45358c395b196f"

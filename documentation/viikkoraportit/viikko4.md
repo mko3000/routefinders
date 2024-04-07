@@ -1,0 +1,1 @@
+A* algoritmi toteutetty. Luin kirjallisuutte jump point serchista ja IDA*:sta. Tein tekstikäyttöliittymän, jolla voi käynnistää simulaation ja ladata ja tallentaa karttoja.
