@@ -80,10 +80,10 @@ class Gui:
                 start_press_delay = 0
                 self.grid.reset_tiles()
                 if d_start_key_pressed:
-                    routefinder = algorithms.Dijkstra(self.grid)
+                    routefinder = algorithms.Dijkstra(self.grid, allow_diagonal=True)
                     routefinder.run_dijkstra()
                 if a_start_key_pressed:
-                    routefinder = algorithms.A_star(self.grid)
+                    routefinder = algorithms.A_star(self.grid, allow_diagonal=True)
                     routefinder.run_a_star()
             if routefinding_started:
                 for tile in routefinder.order:

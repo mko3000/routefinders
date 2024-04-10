@@ -141,17 +141,19 @@ class Grid:
     def reset_tiles(self):
         [[tile.reset_tile() for tile in row] for row in self.grid]
 
-    def update_all_neighbors(self):
+    def update_all_neighbors(self, diagonal = False):
         for y in range(self.h):
             for x in range(self.w):
                 tile = self.grid[y][x]
                 if not tile.blocked:
-                    neighbors = self.calculate_neighbors(x, y)
+                    neighbors = self.calculate_neighbors(x, y, diagonal)
                     tile.update_neighbors(neighbors)
 
-    def calculate_neighbors(self, x, y):
+    def calculate_neighbors(self, x, y, diagonal = False):
         neighbors = []
-        directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]  # down, up, right, left
+        directions = [(0, 1), (0, -1), (1, 0), (-1, 0), (1, 1), (-1, 1), (1, -1), (-1, -1)]
+        if not diagonal:
+            directions = directions[:4]
         for dx, dy in directions:
             nx, ny = x + dx, y + dy
             if self.valid_coordinates(nx, ny) and not self.grid[ny][nx].blocked:
@@ -170,17 +172,6 @@ class Grid:
     def draw_end_and_start(self,screen):
         self.start.draw_tile(screen,(0,225,0))
         self.end.draw_tile(screen,(225,0,0))
-    
-    def draw_test_gradient_grid(self,screen):
-        shade = 0
-        for i in range(self.w):
-            for j in range(self.h):
-                self.grid[i][j] = Tile(i,j)
-                self.grid[i][j].draw_tile(screen,shade)
-                shade += 1
-                if shade >= 225:
-                    shade = 0
-
 
     def __str__(self) -> str:
         output = ""

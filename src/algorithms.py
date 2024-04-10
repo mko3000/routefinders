@@ -2,11 +2,13 @@ from queue import PriorityQueue
 from collections import deque
 from grid import *
 from map_handler import MapHandler
+from math import sqrt
 
 
 class Jump_point_search:
     def __init__(self, grid) -> None:
         self.grid = grid
+        self.setup_grid()
         start = self.grid.start
         self.g_score = {tile: float("inf") for row in grid.grid for tile in row}
         self.g_score[start] = 0
@@ -20,16 +22,33 @@ class Jump_point_search:
         self.grid.grid = [[JPS_tile.from_Tile(tile) for tile in row] for row in self.grid.grid]
         self.grid.start = self.grid.get_tile(self.grid.start.x, self.grid.start.y)
         self.grid.end = self.grid.get_tile(self.grid.end.x, self.grid.end.y)
-        self.grid.update_all_neighbors()
+        self.grid.update_all_neighbors() # pitäiskö tässä tehdä jo jotain muuta?
     
     def heuristic(self, tile):
         end = self.grid.end
         return abs(tile.x-end.x)+abs(tile.y-end.y)
+    
+    def jst_neighbors(self, tile):
+        neighbors = []
+        for neighbor in tile.natural_neighbors:
+            dx = neighbor.x - tile.x
+            dy = neighbor.y - tile.y
+            x = tile.x
+            y = tile.y
+            while self.grid.valid_coordinates(x,y):
+                if self.grid.get_tile(x,y).blocked:
+                    break
+                if self.grid.get_tile(x,y) != tile:
+                    neighbors.append(self.grid.get_tile(x,y))
+                x += dx
+                y += dy
+        return neighbors
 
 
 class A_star:
-    def __init__(self, grid) -> None:
+    def __init__(self, grid, allow_diagonal = False) -> None:
         self.grid = grid
+        self.diagonal = allow_diagonal        
         self.setup_grid()
         self.grid.start.g_score = 0
         self.grid.start.f_scpre = self.heuristic(self.grid.start)
@@ -41,11 +60,24 @@ class A_star:
         self.grid.grid = [[Astar_tile.from_Tile(tile) for tile in row] for row in self.grid.grid]
         self.grid.start = self.grid.get_tile(self.grid.start.x, self.grid.start.y)
         self.grid.end = self.grid.get_tile(self.grid.end.x, self.grid.end.y)
-        self.grid.update_all_neighbors()
+        self.grid.update_all_neighbors(self.diagonal)
     
-    def heuristic(self, tile):
+    def heuristic(self, tile, diagonal=False):
+        if diagonal:
+            return self.heuristic_diagonal(tile)
+        return self.heuristic_orthogonal(tile)
+        
+    def heuristic_orthogonal(self, tile):
         end = self.grid.end
         return abs(tile.x-end.x)+abs(tile.y-end.y)
+    
+    def heuristic_diagonal(self, tile):
+        end = self.grid.end
+        D_orth = 1
+        D_diag = sqrt(2)
+        dx = abs(tile.x-end.x)
+        dy = abs(tile.y-end.y)
+        return D_orth * max(dx, dy) + (D_diag - D_orth) * min(dx, dy)
 
     def run_a_star(self):
         grid = self.grid
@@ -68,12 +100,12 @@ class A_star:
                 return True
             
             for neighbor in current.neighbors:
-                temp_g_score = current.g_score + 1
+                temp_g_score = current.g_score + self.neighbor_g_score(current, neighbor)
 
                 if temp_g_score < neighbor.g_score:
                     self.cameFrom[neighbor] = current
                     neighbor.g_score = temp_g_score
-                    neighbor.f_score = temp_g_score + self.heuristic(neighbor)
+                    neighbor.f_score = temp_g_score + self.heuristic(neighbor, self.diagonal)
                     if neighbor not in open_set_hash:
                         count += 1
                         open_set.put((neighbor.f_score, count, neighbor))
@@ -84,6 +116,11 @@ class A_star:
 
         return False
     
+    def neighbor_g_score(self, current, neighbor):
+        if abs(neighbor.x-current.x) == 1 and abs(neighbor.y-current.y) == 1:
+            return sqrt(2)
+        return 1
+    
     def get_route(self):
         current = self.grid.end
         while current in self.cameFrom:
@@ -93,18 +130,18 @@ class A_star:
 
 
 class Dijkstra:
-    def __init__(self, grid):
+    def __init__(self, grid, allow_diagonal = False):
         self.grid = grid
-        self.setup_grid()
+        self.setup_grid(allow_diagonal)
         self.handled = {tile: False for row in grid.grid for tile in row}
         self.route = []
         self.order = []
 
-    def setup_grid(self):
+    def setup_grid(self, diagonal):
         self.grid.grid = [[Dijkstra_tile.from_Tile(tile) for tile in row] for row in self.grid.grid]
         self.grid.start = self.grid.get_tile(self.grid.start.x, self.grid.start.y)
         self.grid.end = self.grid.get_tile(self.grid.end.x, self.grid.end.y)
-        self.grid.update_all_neighbors()
+        self.grid.update_all_neighbors(diagonal)
     
     def run_dijkstra(self):
         start = self.grid.start
@@ -126,11 +163,16 @@ class Dijkstra:
                 return True
             for neighbor in tile.neighbors:
                 cur = neighbor.dist
-                new = tile.dist + 1
+                new = tile.dist + self.neighbor_distance(tile, neighbor)
                 if new < cur:
                     neighbor.dist = new
                     heap.put((new, neighbor))
         return False
+    
+    def neighbor_distance(self, tile, neighbor):
+        if abs(neighbor.x-tile.x) == 1 and abs(neighbor.y-tile.y) == 1:
+            return sqrt(2)
+        return 1
 
     def get_route(self):
         start = self.grid.start
