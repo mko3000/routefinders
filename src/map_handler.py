@@ -1,9 +1,11 @@
 import json
+import random
 from grid import Grid
 
 class MapHandler:
     def __init__(self, filepath='maps.json'):
         self.filepath = filepath
+        self.loaded_map = None
 
     def save_map(self, grid: Grid, name: str):
         if name in self.list_maps():
@@ -51,6 +53,16 @@ class MapHandler:
             for tile in row:
                 if tile.get("blocked", False):
                     grid.block_tile(tile["x"], tile["y"])
+        self.loaded_map = name
+        return grid
+    
+    def reload_map(self):
+        layout = self.find_map(self.loaded_map)
+        grid = Grid(len(layout[0]), len(layout))
+        for row in layout:
+            for tile in row:
+                if tile.get("blocked", False):
+                    grid.block_tile(tile["x"], tile["y"])
         return grid
 
     def delete_map(self, name):
@@ -61,3 +73,36 @@ class MapHandler:
         with open(self.filepath, 'w') as f:
             json.dump(map_data, f, indent=4)
 
+    def load_movingai_map(self, path, name):
+        mapfile = f'{path}{name}'
+        layout = open(mapfile,'r') #movingai-maps/street-map/Berlin_0_256.map
+        ln = 0
+        passable = ['.','G','S']
+        grid = None
+        while True:
+            ln += 1
+            line = layout.readline()
+            if not line:
+                return grid
+            if ln == 2:
+                h = int(line.split(" ")[1])
+            if ln == 3:
+                w = int(line.split(" ")[1])
+            if ln == 4:
+                grid = Grid(w,h)
+            if ln > 4:
+                y = ln - 5
+                for x in range(w):
+                    if line[x] not in passable:
+                        grid.block_tile(x,y)
+
+
+
+
+
+if __name__ == "__main__":
+    mh = MapHandler()
+    lmap = mh.load_movingai_map('movingai-maps/street-map/','Berlin_0_256.map')
+    lmap.set_random_start()
+    lmap.set_random_end()
+    print(lmap)

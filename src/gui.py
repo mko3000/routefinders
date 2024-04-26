@@ -18,8 +18,8 @@ class Gui:
             self.screen_width = grid_width*Tile.size
             self.screen_height = grid_height*Tile.size
             self.grid = Grid(grid_width,grid_height)
-        self.grid.set_start(0,self.grid.h-1)
-        self.grid.set_end(self.grid.w-1,0)
+        # self.grid.set_start(0,self.grid.h-1)
+        # self.grid.set_end(self.grid.w-1,0)
         self.screen = None
 
         # self.grid.set_start(1,grid_height-2)
@@ -75,24 +75,32 @@ class Gui:
 
             d_start_key_pressed = keys[pygame.K_SPACE]
             a_start_key_pressed = keys[pygame.K_a]
-            if (d_start_key_pressed or a_start_key_pressed) and start_press_delay > self.framerate:
+            j_start_key_pressed = keys[pygame.K_j]
+            if (d_start_key_pressed or a_start_key_pressed or j_start_key_pressed) and start_press_delay > self.framerate:
                 routefinding_started = True
                 start_press_delay = 0
                 self.grid.reset_tiles()
+                jps_dist = 0
                 if d_start_key_pressed:
                     routefinder = algorithms.Dijkstra(self.grid, allow_diagonal=True)
-                    routefinder.run_dijkstra()
+                    result = routefinder.run_dijkstra()
                 if a_start_key_pressed:
                     routefinder = algorithms.A_star(self.grid, allow_diagonal=True)
-                    routefinder.run_a_star()
+                    result = routefinder.run_a_star()
+                if j_start_key_pressed:
+                    routefinder = algorithms.Jump_point_search(self.grid)
+                    result = routefinder.run_jps()
+                    jps_dist = routefinder.get_route()
+                print(f'found route: {result}\ntiles visited: {len(routefinder.order)}\nroute length: {len(routefinder.route)}/{jps_dist}\n')
             if routefinding_started:
                 for tile in routefinder.order:
                     tile.draw_tile(self.screen,(225,0,225))
                 for tile in routefinder.route:
                     tile.draw_tile(self.screen,(225,225,0)) 
-                for tile in routefinder.order:                                           
-                    no = Font.render((f'{routefinder.order.index(tile)}'),False,(225,225,225),(0,0,0))
-                    self.screen.blit(no,(tile.x*Tile.size,tile.y*Tile.size))
+                if len(routefinder.order) < 1000:
+                    for tile in routefinder.order:                                           
+                        no = Font.render((f'{routefinder.order.index(tile)}'),False,(225,225,225),(0,0,0))
+                        self.screen.blit(no,(tile.x*Tile.size,tile.y*Tile.size))
                 self.grid.draw_end_and_start(self.screen)
 
             if start_press_delay <= self.framerate + 1:
@@ -109,10 +117,21 @@ if __name__ == "__main__":
     # ui = Gui(init_screen_width=800, grid_height=30, grid_width=30)
     # grid = ui.start()
     # print(grid)
-
+    berlin = True
     mh = MapHandler()
-    l_map = mh.load_map("s3")
-    ui = Gui(grid=l_map)
+    if berlin:
+        test_map = mh.load_movingai_map('movingai-maps/street-map/','Berlin_0_256.map')
+        test_map.set_start(198,146)
+        test_map.set_end(54,67)
+        # test_map.set_random_start()
+        # test_map.set_random_end()
+        ui = Gui(grid=test_map, init_screen_width=3800)
+    else:
+        test_map = mh.load_map("s3")
+        test_map.set_start(0,test_map.h-1)
+        test_map.set_end(test_map.w-1,0)
+        ui = Gui(grid=test_map, init_screen_width=800)
+
     grid = ui.start()
     print(grid)
 

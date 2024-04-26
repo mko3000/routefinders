@@ -1,5 +1,5 @@
 from pygame import draw, display
-
+import random
 
 
 class Tile:
@@ -70,9 +70,13 @@ class Astar_tile(Tile):
 
 
 class JPS_tile(Tile):
-    def __init__(self, x, y, blocked=False):
+    def __init__(self, x=None, y=None, blocked=False):
         super().__init__(x, y, blocked)
+        self.g_score = float("Inf")
+        self.f_score = float("Inf")
         self.natural_neighbors = []
+        self.forced_neighbors = []
+        #self.pruned_neighbors = {} #coordinate tuple as key, if neighbor is forced set value as True
     
     @classmethod
     def from_Tile(cls, tile: Tile):
@@ -138,6 +142,26 @@ class Grid:
         if self.valid_coordinates(x,y):
             self.end = self.get_tile(x,y)
 
+    def set_random_start(self):
+        start = self.end
+        while start == self.end:
+            start = self.get_random_free_point()
+        self.start = start
+    
+    def set_random_end(self):
+        end = self.start
+        while end == self.start:
+            end = self.get_random_free_point()
+        self.end = end
+
+    def get_random_free_point(self):
+        x = random.randint(0,self.w)
+        y = random.randint(0,self.h)
+        loc = self.get_free_tile(x,y)
+        if loc:
+            return loc
+        return self.get_random_free_point()
+    
     def reset_tiles(self):
         [[tile.reset_tile() for tile in row] for row in self.grid]
 
@@ -178,7 +202,11 @@ class Grid:
         for i in range(self.h):
             row = ""
             for j in range(len(self.grid[i])):
-                if self.grid[i][j].blocked:
+                if self.grid[i][j] == self.start:
+                    row += "S"
+                elif self.grid[i][j] == self.end:
+                    row += "E"
+                elif self.grid[i][j].blocked:
                     row += "#"
                 else:
                     row += "."
@@ -186,4 +214,10 @@ class Grid:
         return output
     
 if __name__ == "__main__":
-    pass
+    grid = Grid(2,2)
+    grid.block_tile(0,1)
+    grid.block_tile(1,0)
+    print(grid)
+    grid.set_random_start()
+    grid.set_random_end()
+    print(f'start: {grid.start}, end: {grid.end}')
