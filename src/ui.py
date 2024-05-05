@@ -2,6 +2,12 @@ from gui import Gui
 from grid import Grid
 from map_handler import MapHandler
 import sys
+import random
+from dijkstra import Dijkstra
+from astar import A_star
+from jps import Jump_point_search
+from time import time
+from algorithm_tester import Comparison
 
 
 class Ui:
@@ -17,6 +23,7 @@ class Ui:
 Select how you want to run your search algorithms:
 1 draw custom map
 2 load saved map
+3 run algorithm comparison
 q quit
                   """)
             user_input = input(">> ")
@@ -25,6 +32,8 @@ q quit
                     self.start_gui()
                 case "2":
                     self.load_map()
+                case "3":
+                    self.run_comparison()
                 case "q":
                     self.quit_program()
                 case _:
@@ -83,6 +92,10 @@ q quit
             loaded = map_handler.load_map(map_name)
         if loaded:
             self.start_gui(loaded)
+
+    def run_comparison(self):
+        comp = Comparison()
+        comp.run_algorithms()
         
 
 if __name__ == "__main__":

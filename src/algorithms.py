@@ -197,7 +197,6 @@ class Jump_point_search:
             return 14 * dy + 10 * (dx - dy)
         else:
             return 14 * dx + 10 * (dy - dx)
-        #return abs(tile.x-end.x)+abs(tile.y-end.y)
     
     
     def get_route(self):

@@ -1,0 +1,1 @@
+Jump point search on saatu toimimaan. Olen myös ladannut karttoja movingai:n sivuilta testaamista varten. Vertailussa JPS on nopeampi kuin Dijkstra, mutta häviää vielä selvästi A*:lle. Jotain optimointi-ideoita minulla jo on, katsotaan ehdinkö toteuttaa. Testit algoritmien toiminnalle pitäisi toteuttaa myös.

@@ -1,4 +1,4 @@
-from pygame import draw, display
+from pygame import draw
 import random
 
 
@@ -44,6 +44,7 @@ class Dijkstra_tile(Tile):
         d_tile_obj = cls()
         for key, value in tile.__dict__.items():
             d_tile_obj.__dict__[key] = value
+        d_tile_obj.__dict__['dist'] = float("Inf")
         return d_tile_obj    
     
     def __gt__(self,other):
@@ -63,6 +64,8 @@ class Astar_tile(Tile):
         a_tile_obj = cls()
         for key, value in tile.__dict__.items():
             a_tile_obj.__dict__[key] = value
+        a_tile_obj.__dict__['g_score'] = float("Inf")
+        a_tile_obj.__dict__['f_score'] = float("Inf")
         return a_tile_obj  
 
     def __gt__(self,other):
@@ -80,10 +83,14 @@ class JPS_tile(Tile):
     
     @classmethod
     def from_Tile(cls, tile: Tile):
-        d_tile_obj = cls()
+        jps_tile_obj = cls()
         for key, value in tile.__dict__.items():
-            d_tile_obj.__dict__[key] = value
-        return d_tile_obj   
+            jps_tile_obj.__dict__[key] = value
+        jps_tile_obj.__dict__['g_score'] = float("Inf")
+        jps_tile_obj.__dict__['f_score'] = float("Inf")
+        jps_tile_obj.__dict__['natural_neighbors'] = []
+        jps_tile_obj.__dict__['forced_neighbors'] = []
+        return jps_tile_obj   
 
 
 class Grid:
