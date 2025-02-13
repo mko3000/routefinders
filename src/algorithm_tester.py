@@ -6,6 +6,8 @@ from map_handler import MapHandler
 import random
 import cProfile
 import re
+from rich import print
+from rich.table import Table
 
 
 class Comparison:
@@ -15,6 +17,9 @@ class Comparison:
         self.map_handler = MapHandler()
 
     def setup_map(self):
+        """
+        Selects a random map with random start and end locations.
+        """
         mapfile = self.maps[random.randint(0,len(self.maps)-1)]
         m = self.map_handler.load_movingai_map(self.path,mapfile)
         m.set_random_start()
@@ -30,32 +35,51 @@ class Comparison:
     def run_algorithms(self):        
         map_setup = self.setup_map()
         test_map, mapfile, start, end = map_setup
-        print(test_map)
-        print(mapfile)
-        print(f'start: ({start.x},{start.y}), end: ({end.x},{end.y})\n')
+        print()
+        print(f"[bold]Map:[/bold] [bold yellow]{mapfile}[/bold yellow]")
+        print(f"[bold]Start:[/bold] ({start.x},{start.y}), [bold]End:[/bold] ({end.x},{end.y})")
 
         jps = Jump_point_search(test_map)
         s = time()
         jps_result = jps.run_jps()
         e = time()
-        print(f'JPS: {jps_result}, visited: {len(jps.order)}, length: {jps.get_dist()}, time: {round(e-s,6)}')
+        jps_time = round(e-s,6)
+        jps_visited = len(jps.order)
+        jps_len = jps.get_dist()
 
         test_map = self.reset_map(mapfile, start, end)
         astar = A_star(test_map, allow_diagonal=True)
         s = time()
         astar_result = astar.run_a_star()
         e = time()
-        print(f'ASTAR: {astar_result}, visited: {len(astar.order)}, length: {len(astar.route)}, time: {round(e-s,6)}')
+        astar_time = round(e-s,6)
+        astar_visited = len(astar.order)
+        astar_len = len(astar.route)
 
         test_map = self.reset_map(mapfile, start, end)
-        test_map.set_start(start.x,start.y)
-        test_map.set_end(end.x,end.y)
-        dijksta = Dijkstra(test_map, allow_diagonal=True)
+        dijkstra = Dijkstra(test_map, allow_diagonal=True)
         s = time()
-        dijksta_result = dijksta.run_dijkstra()
+        dijkstra_result = dijkstra.run_dijkstra()
         e = time()
-        print(f'DIJKSTRA: {dijksta_result}, visited: {len(dijksta.order)}, length: {len(dijksta.route)}, time: {round(e-s,6)}')
+        dijkstra_time = round(e-s,6)
+        dijkstra_visited = len(dijkstra.order)
+        dijkstra_len = len(dijkstra.route)
 
+
+        # ChatGPT 4o was used to help with the table formating
+        table = Table(show_header=True, header_style="bold magenta")
+
+        table.add_column("Algorithm", style="bold cyan")
+        table.add_column("Found", justify="center")
+        table.add_column("Tiles Visited", justify="right")
+        table.add_column("Route Length", justify="right")
+        table.add_column("Time (s)", justify="right")
+
+        table.add_row("JPS", str(jps_result), str(jps_visited), str(jps_len), str(jps_time))
+        table.add_row("ASTAR", str(astar_result), str(astar_visited), str(astar_len), str(astar_time))
+        table.add_row("DIJKSTRA", str(dijkstra_result), str(dijkstra_visited), str(dijkstra_len), str(dijkstra_time))
+
+        print(table)
 
 
 if __name__ == "__main__":

@@ -3,9 +3,13 @@ import random
 from grid import Grid
 
 class MapHandler:
+    """
+    A class for saving and loading maps using a json file for storage.
+    """
     def __init__(self, filepath='maps.json'):
         self.filepath = filepath
         self.loaded_map = None
+        self.movingaimaps = ['Berlin_0_256.map',"Denver_0_256.map",'Sydney_2_512.map','Paris_2_512.map','NewYork_1_256.map','thecrucible.map','divideandconquer.map','battleground.map']
 
     def save_map(self, grid: Grid, name: str):
         if name in self.list_maps():
@@ -32,6 +36,7 @@ class MapHandler:
         map_names = []
         for m in map_data["maps"]:
             map_names.append(m["name"])
+        map_names += self.movingaimaps
         return map_names
 
     def find_map(self, name):
@@ -43,6 +48,11 @@ class MapHandler:
         return False
 
     def load_map(self, name):
+        if name in self.movingaimaps:
+            grid = self.load_movingai_map('movingai-maps/',name)
+            grid.set_random_start()
+            grid.set_random_end()
+            return grid
         layout = self.find_map(name)
         if not layout:
             print(f'map with the name {name} not found')

@@ -8,9 +8,13 @@ from astar import A_star
 from jps import Jump_point_search
 from time import time
 from algorithm_tester import Comparison
+from rich import print
 
 
 class Ui:
+    """
+    A class for the text ui.
+    """
     def __init__(self) -> None:
         pass
 
@@ -49,7 +53,10 @@ q quit
             gui = Gui()
             grid = gui.start()
         else:
-            gui = Gui(grid=m)
+            width = 800
+            if m.w > 100:
+                width = 2000
+            gui = Gui(grid=m, init_screen_width=width)
             grid = gui.start()
         self.run_ended(grid)
 

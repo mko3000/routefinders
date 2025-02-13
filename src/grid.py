@@ -95,7 +95,8 @@ class JPS_tile(Tile):
 
 class Grid:
     def __init__(self,width,height):
-        """Grid
+        """
+        Grid
         
         Args:
             width (int): width in grid tiles

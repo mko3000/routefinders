@@ -10,7 +10,22 @@ import re
 
 
 class Jump_point_search:
+    """
+    A class to perform the Jump Point Search (jps) pathfinding algorithm on a grid.
+
+    Attributes:
+        grid (Grid): the grid
+        cameFrom (dict): saves the predecessor if each visited tile
+        route (list): the path from start to finish
+        order (list): the order in which the tiles were visited
+    """
     def __init__(self, grid) -> None:
+        """
+        Initializes the jps algorithm
+
+        Parameters:
+            grid (Grid): the grid
+        """
         self.grid = grid
         self.setup_grid()
         self.grid.start.g_score = 0
@@ -21,6 +36,9 @@ class Jump_point_search:
 
     
     def setup_grid(self):
+        """
+        Sets up the grid for jps and updates neighbors for every tile.
+        """
         self.grid.grid = [[JPS_tile.from_Tile(tile) for tile in row] for row in self.grid.grid]
         self.grid.start = self.grid.get_tile(self.grid.start.x, self.grid.start.y)
         self.grid.end = self.grid.get_tile(self.grid.end.x, self.grid.end.y)
@@ -28,15 +46,22 @@ class Jump_point_search:
     
     
     def prune_neighbors(self, came_from, tile):
+        """
+        Prunes neighbors according to the rules described in the jps article and saves to tile's natural_neighbors and forced_neighbors.
+
+        Parameters:
+            came_from (Tile): the previous tile
+            tile (Tile): current tile
+        """
         d = self.direction(came_from, tile)
         
-        # sääntö 1, jos ortogonaalinen liike, poistetaan muut paitsi se, mikä on parentista katsottuna tilestä seuraava
+        # rule 1: if an orthogonal move, remove others but the one which comes next after the tile as seen from the parent.
         if not d[2]:
             natural_neighbor = self.grid.get_free_tile(tile.x + d[0], tile.y + d[1])
             if natural_neighbor and natural_neighbor not in tile.natural_neighbors:
                 tile.natural_neighbors.append(natural_neighbor)
         
-        # sääntö 2, jos diagonaalinen liike, ...
+        # rule 2: for diagonal movement...
         if d[2]:
             natural_neighbors = [
                 self.grid.get_free_tile(tile.x + d[0], tile.y + d[1]),
@@ -47,7 +72,7 @@ class Jump_point_search:
                 if natural_neighbor and natural_neighbor not in tile.natural_neighbors:
                     tile.natural_neighbors.append(natural_neighbor)
         
-        # sääntö 3, lisätään forced neighboreita
+        # rule 3: add forced neighbors
         adjacent_coordinates = []
         forced_neighbor = None
         if d[0] == 0: # moving vertically
@@ -76,6 +101,16 @@ class Jump_point_search:
 
     
     def identify_successors(self, came_from, tile): 
+        """
+        Indentifies successors
+
+        Parameters:
+            came_from (Tile): the previous tile
+            tile (Tile): current tile
+
+        Returns:
+            list: a list of successor tiles
+        """
         successors = []
         self.prune_neighbors(came_from, tile)
         pruned_neighbors = tile.natural_neighbors + tile.forced_neighbors
@@ -86,24 +121,37 @@ class Jump_point_search:
         return successors
 
     
-    def jump2(self,tile,d):
-        n = self.grid.get_free_tile(tile.x + d[0], tile.y + d[1])
-        if not n:
-            return None
-        if n == self.grid.end:
-            return n
-        self.prune_neighbors(tile, n)
-        if n.forced_neighbors: #checks if one of the neighbors is forced
-            return n
-        if d[2]:
-            orthagonals = ((d[0],0,False),(0,d[1],False))
-            for i in range(2):
-                direction = orthagonals[i]
-                if self.jump(n,direction):
-                    return n
-        return self.jump(n,d)
+    # def jump2(self,tile,d):
+    #     """
+    #     not in use, remove
+    #     """
+    #     n = self.grid.get_free_tile(tile.x + d[0], tile.y + d[1])
+    #     if not n:
+    #         return None
+    #     if n == self.grid.end:
+    #         return n
+    #     self.prune_neighbors(tile, n)
+    #     if n.forced_neighbors: #checks if one of the neighbors is forced
+    #         return n
+    #     if d[2]:
+    #         orthagonals = ((d[0],0,False),(0,d[1],False))
+    #         for i in range(2):
+    #             direction = orthagonals[i]
+    #             if self.jump(n,direction):
+    #                 return n
+    #     return self.jump(n,d)
     
     def jump(self, tile, d):
+        """
+        Jumps from tile towards the given direction
+
+        Parameters:
+            tile (Tile): The tile from which the jump is initiated.
+            d (3-tuple): direction of movement (right/left, up/down, diagonal(bool))
+
+        Returns:
+            Tile: the next tile, or None
+        """
         while True:
             next_tile = self.grid.get_free_tile(tile.x + d[0], tile.y + d[1])
             if not next_tile:
@@ -125,6 +173,12 @@ class Jump_point_search:
 
     
     def run_jps(self):
+        """
+        Jump Poin Search algorithm to find a path from the start to the end tile.
+
+        Returns:
+            bool: True if a path is found, False otherwise.
+        """
         grid = self.grid
         start = grid.start
         count = 0
@@ -166,6 +220,16 @@ class Jump_point_search:
 
     
     def neighbor_g_score(self, a, b):
+        """
+        Calculates the g score between two tiles.
+
+        Parameters:
+            a (Tile): first tile
+            b (Tile): second tile
+
+        Returns:
+            float: the g score between tiles a and b
+        """
         d = self.direction(a,b)
         dx = abs(d[0])
         dy = abs(d[1])
@@ -178,6 +242,15 @@ class Jump_point_search:
     
     
     def heuristic(self, tile):
+        """
+        Calculates the heuristic cost from the given tile to the end tile.
+
+        Parameters:
+            tile (Tile): The tile for which the heuristic is calculated.
+
+        Returns:
+            float: the estimated cost form the given tile to the end tile.
+        """
         end = self.grid.end
         dx = abs(tile.x-end.x)
         dy = abs(tile.y-end.y)
@@ -188,6 +261,9 @@ class Jump_point_search:
     
     
     def get_route(self):
+        """
+        Reconstructs the path from the end to the start using the 'cameFrom' dict and saves it to 'route'.
+        """
         current = self.grid.end
         while current in self.cameFrom:
             self.route.append(current)
@@ -197,6 +273,12 @@ class Jump_point_search:
 
     
     def get_dist(self):
+        """
+        Calculates the length of the route
+
+        Returns:
+            int: route length
+        """
         distance = 0
         for i in range(len(self.route)-1):
             distance += self.get_distance_between_points(self.route[i], self.route[i+1])
@@ -204,12 +286,32 @@ class Jump_point_search:
         
     
     def get_distance_between_points(self,a,b):
+        """
+        Gives the distance between two tiles.
+
+        Parameters:
+            a (Tile): first tile
+            b (Tile): second tile
+
+        Returns:
+            int: number of tiles from a to b 
+        """
         dx = abs(a.x-b.x)
         dy = abs(a.y-b.y)
         return max(dx,dy)
     
 
     def direction(self,a,b):
+        """
+        Gives the direction when going from tile a to tile b. Also tells if the direction is diagonal.
+
+        Parameters:
+            a (Tile): first tile
+            b (Tile): second tile
+        
+        Returns:
+            tuple (int, int, bool): horisontal direction (-1 or 1), vertical direction (-1 or 1), diagonal movement (True or False)
+        """
         dh = b.x-a.x
         if dh != 0:
             dh = int(copysign(1,(b.x-a.x)))
@@ -221,6 +323,7 @@ class Jump_point_search:
 
 
 if __name__ == "__main__":
+    #testing...
     mh = MapHandler()
     test_map = mh.load_movingai_map('movingai-maps/street-map/','Berlin_0_256.map')
     test_map.set_random_start()

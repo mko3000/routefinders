@@ -3,20 +3,20 @@ from grid import Grid, Tile
 
 class TestTile(unittest.TestCase):
     def setUp(self):
-        print("Set up goes here")
+        pass
 
     def test_creating_tile(self):
         tile = Tile(2,3)
 
-        self.assertEqual(str(tile), "[(2,3), b:False, n:0, d:inf]")
+        self.assertEqual(str(tile), "[(2,3), b:False, n:0]")
 
     def test_reset_tile(self):
         tile = Tile(2,4)
         tile.visited = True
-        tile.dist = 2
-        tile.reset_tile()
-
-        self.assertEqual(tile.dist, float("Inf"))
+        print(tile.__dict__)
+        tile = tile.reset_tile()
+        print(tile.__dict__)
+        
         self.assertEqual(tile.neighbors,[])
         self.assertEqual(tile.visited, False)
 
