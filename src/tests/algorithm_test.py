@@ -9,6 +9,7 @@ import astar, dijkstra, jps, grid
 from algorithm_tester import Comparison
 from map_handler import MapHandler
 import random
+from time import time
 
 
 class TestDijkstra(unittest.TestCase):
@@ -27,6 +28,13 @@ class TestDijkstra(unittest.TestCase):
         self.assertEqual(result,True)
         self.assertEqual(len(d.route),9)
 
+    def test_no_route_dijkstra(self):
+        mh = MapHandler()
+        failing_map = mh.load_map("impossible")
+        d = dijkstra.Dijkstra(failing_map,True)
+        result = d.run_dijkstra()
+        self.assertEqual(result,False)
+
 class TestAstar(unittest.TestCase):
     def setUp(self) -> None:
         mh = MapHandler()
@@ -43,6 +51,13 @@ class TestAstar(unittest.TestCase):
         result = a.run_a_star()
         self.assertEqual(result,True)
         self.assertEqual(len(a.route),9)
+
+    def test_no_route_astar(self):
+        mh = MapHandler()
+        failing_map = mh.load_map("impossible")
+        a = astar.A_star(failing_map,True)
+        result = a.run_a_star()
+        self.assertEqual(result,False)
 
 class TestJPS(unittest.TestCase):
     def setUp(self) -> None:
@@ -62,9 +77,17 @@ class TestJPS(unittest.TestCase):
         self.assertEqual(result,True)
         self.assertEqual(j.get_dist(),9)
 
+    def test_no_route_jps(self):
+        mh = MapHandler()
+        failing_map = mh.load_map("impossible")
+        j = jps.Jump_point_search(failing_map)
+        result = j.run_jps()
+        self.assertEqual(result,False)
+
 class TestAlgorithms(unittest.TestCase):
     """
-    First runs Dijkstra on a random Moving AI benchmark map with random start and end locations and compares A* and JPS results to it.
+    First runs Dijkstra on a random Moving AI benchmark map with random start and end locations and compares A* and JPS results to it. 
+    Requires A* and JPS to run faster than Dijkstra.
     """
     def setUp(self) -> None: 
         self.path = 'movingai-maps/'
@@ -73,7 +96,10 @@ class TestAlgorithms(unittest.TestCase):
         map_setup = self.setup_map()
         test_map, self.mapfile, self.start, self.end = map_setup
         d = dijkstra.Dijkstra(test_map,True)
+        s = time()
         d_res = d.run_dijkstra()
+        e = time()
+        self.dijkstra_duration = e-s
         self.result = d_res
         self.length = len(d.route)
 
@@ -93,15 +119,21 @@ class TestAlgorithms(unittest.TestCase):
     def test_astar_result(self):
         test_map = self.reset_map(self.mapfile, self.start, self.end)
         a = astar.A_star(test_map,True)
+        s = time()
         a_res = a.run_a_star()
+        e = time()
         a_len = len(a.route)
         self.assertEqual(a_res,self.result)
         self.assertEqual(a_len,self.length)
+        self.assertLess(e-s,self.dijkstra_duration)
 
     def test_jps_result(self):
         test_map = self.reset_map(self.mapfile, self.start, self.end)
         j = jps.Jump_point_search(test_map)
+        s = time()
         j_res = j.run_jps()
+        e = time()
         j_len = j.get_dist()
         self.assertEqual(j_res,self.result)
         self.assertEqual(j_len,self.length)
+        self.assertLess(e-s,self.dijkstra_duration)

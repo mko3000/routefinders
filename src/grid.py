@@ -221,11 +221,3 @@ class Grid:
             output += f'{row}\n'
         return output
     
-if __name__ == "__main__":
-    grid = Grid(2,2)
-    grid.block_tile(0,1)
-    grid.block_tile(1,0)
-    print(grid)
-    grid.set_random_start()
-    grid.set_random_end()
-    print(f'start: {grid.start}, end: {grid.end}')

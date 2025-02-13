@@ -320,19 +320,3 @@ class Jump_point_search:
             dv = int(copysign(1,(b.y-a.y)))
         diagonal = dh != 0 and dv != 0
         return(dh, dv, diagonal)
-
-
-if __name__ == "__main__":
-    #testing...
-    mh = MapHandler()
-    test_map = mh.load_movingai_map('movingai-maps/street-map/','Berlin_0_256.map')
-    test_map.set_random_start()
-    test_map.set_random_end()
-    print(f'start: {test_map.start}, end: {test_map.end}')
-
-    jps = Jump_point_search(test_map)
-    cProfile.run("jps.run_jps()")
-    s = time()
-    jps_result = jps.run_jps()
-    e = time()
-    print(f'JPS: {jps_result}, visited: {len(jps.order)}, length: {jps.get_dist()}, time: {round(e-s,6)}')

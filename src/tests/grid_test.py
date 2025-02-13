@@ -20,7 +20,7 @@ class TestTile(unittest.TestCase):
         self.assertEqual(tile.neighbors,[])
         self.assertEqual(tile.visited, False)
 
-class TestGrid:
+class TestGrid():    
     def test_grid_initialization(self):
         grid = Grid(10, 10)
         assert grid.w == 10 and grid.h == 10
@@ -49,3 +49,6 @@ class TestGrid:
         exp_neighbors = [grid.get_tile(0, 1), grid.get_tile(2, 1), grid.get_tile(1, 2)] 
         for n in exp_neighbors:
             assert n in grid.get_tile(1,1).neighbors
+        assert grid.get_tile(1,0).neighbors == []
+
+
